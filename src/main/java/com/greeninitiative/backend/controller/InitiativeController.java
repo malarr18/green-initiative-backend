@@ -16,15 +16,21 @@ public class InitiativeController {
     @Autowired
     private InitiativeRepository initiativeRepository;
 
-    // Add Initiative API
+    // Add Initiative
     @PostMapping("/add")
     public Initiative addInitiative(@RequestBody Initiative initiative) {
         return initiativeRepository.save(initiative);
     }
 
-    // Get All Initiatives API
+    // Get All Initiatives
     @GetMapping("/all")
     public List<Initiative> getAllInitiatives() {
         return initiativeRepository.findAll();
+    }
+
+    // Get Initiative By ID
+    @GetMapping("/{id}")
+    public Initiative getInitiativeById(@PathVariable Long id) {
+        return initiativeRepository.findById(id).orElse(null);
     }
 }
