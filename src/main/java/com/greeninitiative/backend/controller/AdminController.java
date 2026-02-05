@@ -21,21 +21,37 @@ public class AdminController {
     @Autowired
     private InitiativeRepository initiativeRepository;
 
-    // ✅ View all users
+    // ✅ View all users (ADMIN only)
     @GetMapping("/users")
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(@RequestParam String role) {
+
+        if (!role.equals("ADMIN")) {
+            return null;   // access denied
+        }
+
         return userRepository.findAll();
     }
 
-    // ✅ Delete user by ID
+    // ✅ Delete user
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable Long id, @RequestParam String role) {
+
+        if (!role.equals("ADMIN")) {
+            return;
+        }
+
         userRepository.deleteById(id);
     }
 
     // ✅ Update initiative
     @PutMapping("/initiative/{id}")
-    public Initiative updateInitiative(@PathVariable Long id, @RequestBody Initiative initiative) {
+    public Initiative updateInitiative(@PathVariable Long id,
+                                       @RequestBody Initiative initiative,
+                                       @RequestParam String role) {
+
+        if (!role.equals("ADMIN")) {
+            return null;
+        }
 
         Initiative existing = initiativeRepository.findById(id).orElse(null);
 
@@ -54,7 +70,12 @@ public class AdminController {
 
     // ✅ Delete initiative
     @DeleteMapping("/initiative/{id}")
-    public void deleteInitiative(@PathVariable Long id) {
+    public void deleteInitiative(@PathVariable Long id, @RequestParam String role) {
+
+        if (!role.equals("ADMIN")) {
+            return;
+        }
+
         initiativeRepository.deleteById(id);
     }
 }
