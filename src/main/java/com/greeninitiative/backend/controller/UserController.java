@@ -14,9 +14,18 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    // Register User API
+    // ✅ Register User API
     @PostMapping("/register")
     public User registerUser(@RequestBody User user) {
         return userRepository.save(user);
+    }
+
+    // ✅ Login User API
+    @PostMapping("/login")
+    public User loginUser(@RequestBody User user) {
+        return userRepository.findByEmailAndPassword(
+                user.getEmail(),
+                user.getPassword()
+        );
     }
 }
